@@ -1,5 +1,12 @@
 import { Model } from 'mongoose';
 
+export interface TaskMutation {
+  user: string;
+  title: string;
+  description: string;
+  status: string;
+}
+
 export interface UserFields {
   username: string;
   password: string;

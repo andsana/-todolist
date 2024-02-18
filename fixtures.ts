@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import mongoose from 'mongoose';
 import config from './config';
 import User from './models/User';
+import Task from './models/Task';
 
 const dropCollection = async (
   db: mongoose.Connection,
@@ -18,15 +19,22 @@ const run = async () => {
   await mongoose.connect(config.mongoose.db);
   const db = mongoose.connection;
 
-  const collections = ['categories', 'products', 'users'];
+  const collections = ['tasks', 'users'];
 
   for (const collectionName of collections) {
     await dropCollection(db, collectionName);
   }
-  await User.create({
+  const user = await User.create({
     username: 'user',
-    password: '23fGr4725@F',
+    password: '$2b$10$Zs6SNP7Nfn4P7eE6son8E.ROHJhdqeqYjGBlGs7qeahWz8nJ53HFS',
     token: crypto.randomUUID(),
+  });
+
+  await Task.create({
+    title: 'to do homework',
+    description: 'Laboratory work',
+    status: 'new',
+    user: user._id,
   });
 
   await db.close();
